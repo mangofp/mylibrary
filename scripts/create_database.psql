@@ -1,1 +1,1 @@
-create database library owner postgres;
+create database library2 owner postgres;
