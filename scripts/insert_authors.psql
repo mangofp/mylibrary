@@ -1,0 +1,2 @@
+INSERT INTO author(name) VALUES ('Isaac Asimov');
+INSERT INTO author(name) VALUES ('Frank Herbert');

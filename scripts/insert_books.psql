@@ -1,0 +1,9 @@
+INSERT INTO books(title, description, author_id) 
+VALUES ('Foundation', 'Epic story', 1);
+
+INSERT INTO books(title, description, author_id) 
+VALUES ('Dune', 'Epic story', 2);
+
+INSERT INTO books(title, description, author_id) 
+VALUES ('Second Foundation', 'Epic story', 1);
+
