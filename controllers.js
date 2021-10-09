@@ -6,8 +6,10 @@ const password = process.env.DB_PASS
 const host = process.env.DB_HOST
 const port = process.env.DB_PORT
 
-const local_uri = `postgres://${username}:${password}@${host}:${port}/library2`
-const uri = process.env.DATABASE_URL || local_uri
+let uri = `postgres://${username}:${password}@${host}:${port}/library2`
+if (process.env.DATABASE_URL) {
+    uri = process.env.DATABASE_URL + "?ssl=true"
+}
 
 console.log(uri)
 const db = pgp(uri)
