@@ -1,1 +1,1 @@
-GRANT all privileges on database library to dldb;
+select * from author;

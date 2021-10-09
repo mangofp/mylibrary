@@ -2,7 +2,7 @@ const express = require('express')
 require('dotenv').config()
 const cors = require('cors')
 
-const { addBook, getBooks } = require('./controllers')
+const { addBook, getBooks, getOneBook } = require('./controllers')
 
 const app = express()
 app.use(express.json())
@@ -18,6 +18,11 @@ app.post("/book", async (req, res) => {
 
 app.get("/book", async (req, res) => {
     const result = await getBooks()
+    res.status(201).send(result)
+})
+
+app.get("/book/:id",  async (req, res) => {
+    const result = await getOneBook(req.params.id)
     res.status(201).send(result)
 })
 
