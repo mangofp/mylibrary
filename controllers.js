@@ -58,10 +58,10 @@ async function deleteBook(id) {
 
 async function getBooks() {
     const books = await db.query(`
-        select name author, title, description, books.id book_id
-        from books
-        left join author 
-        on author.id = books.author_id
+        select a.name author, b.title, b.description descr, b.id book_id
+        from books AS b
+        left join author AS a
+        on a.id = b.author_id;
     `);
 
     return books
