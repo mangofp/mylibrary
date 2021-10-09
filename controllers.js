@@ -27,7 +27,7 @@ if (process.env.DATABASE_URL) {
 //    sslmode: "require"
 //}
 
-const db = pgp(cn);
+//const db = pgp(cn);
 
 async function addBook(book) {
     const newBook = {
