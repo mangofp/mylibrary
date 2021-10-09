@@ -6,14 +6,27 @@ const password = process.env.DB_PASS
 const host = process.env.DB_HOST
 const port = process.env.DB_PORT
 
-let uri = `postgres://${username}:${password}@${host}:${port}/library2`
-if (process.env.DATABASE_URL) {
-    uri = process.env.DATABASE_URL + "?ssl=true"
-    pgp.pg.defaults.ssl = true
+//let uri = `postgres://${username}:${password}@${host}:${port}/library2`
+//if (process.env.DATABASE_URL) {
+//    uri = process.env.DATABASE_URL + "?ssl=true"
+//    pgp.pg.defaults.ssl = true
+//}
+//
+//console.log(uri)
+//const db = pgp(uri)
+
+const pgp = require('pg-promise')();
+const cn = {
+    database: "d3etg4uerniqdl",
+    host: "ec2-34-199-15-136.compute-1.amazonaws.com",
+    port: "5432",
+    user: "bvlhcayvqnzhcf",
+    password: "81d4c1f7a3013e4a31b101a0b245c3caa812093b4fc3cb960fbef07d282987bb",
+    ssl: { rejectUnauthorized: false },
+    sslmode: "require"
 }
 
-console.log(uri)
-const db = pgp(uri)
+const db = pgp(cn);
 
 async function addBook(book) {
     const newBook = {

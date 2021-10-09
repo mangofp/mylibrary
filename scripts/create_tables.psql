@@ -10,3 +10,4 @@ CREATE TABLE books (
    description TEXT,
    author_id INT REFERENCES author(id)
 );
+
