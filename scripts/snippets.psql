@@ -1,1 +1,2 @@
 select * from author;
+select * from books;
