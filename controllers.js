@@ -9,6 +9,7 @@ const port = process.env.DB_PORT
 let uri = `postgres://${username}:${password}@${host}:${port}/library2`
 if (process.env.DATABASE_URL) {
     uri = process.env.DATABASE_URL + "?ssl=true"
+    pgp.pg.defaults.ssl = true
 }
 
 console.log(uri)
