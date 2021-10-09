@@ -17,7 +17,12 @@ app.post("/book", async (req, res) => {
 })
 
 app.get("/book", async (req, res) => {
-    const result = await getBooks()
+    try {
+        const result = await getBooks()
+    } catch (err) {
+        return res.status(400).send({error: err.message})
+    }
+    
     res.status(201).send(result)
 })
 
