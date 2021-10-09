@@ -15,7 +15,6 @@ const port = process.env.DB_PORT
 //console.log(uri)
 //const db = pgp(uri)
 
-const pgp = require('pg-promise')();
 const cn = {
     database: "d3etg4uerniqdl",
     host: "ec2-34-199-15-136.compute-1.amazonaws.com",
