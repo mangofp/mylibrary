@@ -35,34 +35,43 @@ async function addBook(book) {
         author_id: book.authorId 
     }
 
-    const result = await db.query('INSERT INTO books(${this:name}) VALUES(${this:csv})', newBook)
-    return newBook;
+    const result = await db.one('INSERT INTO books(${this:name}) VALUES(${this:csv}) RETURNING id', newBook)
+    console.log(result.id)
+    return getOneBook(result.id);
 }
 
 async function updateBook(id, update) {
-    await db.none("UPDATE books SET description = '${description:value}' WHERE id = ${id}", {
+    await db.query("UPDATE books SET description = '${description:value}' WHERE id = ${id}", {
         id: id,
         description: update.description
     }
     )
+    return getOneBook(id);
+}
+
+async function deleteBook(id) {
+    await db.query("DELETE FROM books WHERE id = ${id}", {
+        id: id
+    })
     return true;
 }
 
 async function getBooks() {
-    const books = await db.query('SELECT ${columns:name} FROM ${table:name}', {
-        columns: ['id', 'title'],
-        table: 'books'
-    });
+    const books = await db.query(`
+        select name author, title, description, books.id book_id
+        from books
+        left join author 
+        on author.id = books.author_id
+    `);
 
     return books
 }
 
 async function getOneBook(id) {
-    const book = await db.query('SELECT ${columns:name} FROM ${table:name} WHERE id = ${bookid:name}', {
-        columns: ['id', 'title'],
+    return await db.one('SELECT ${columns:name} FROM ${table:name} WHERE id = ${bookid}', {
+        columns: ['id', 'title', 'description', 'author_id'],
         table: 'books',
         bookid: id
-
     });
 }
 
@@ -70,5 +79,6 @@ module.exports = {
     addBook,
     getOneBook,
     getBooks,
-    updateBook
+    updateBook,
+    deleteBook
 }

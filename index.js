@@ -6,7 +6,8 @@ const {
     addBook, 
     getBooks, 
     getOneBook,
-    updateBook 
+    updateBook,
+    deleteBook 
 } = require('./controllers')
 
 const app = express()
@@ -23,22 +24,27 @@ app.post("/book", async (req, res) => {
 
 app.get("/book", async (req, res) => {
     try {
-        const result = await getBooks()
+       const result = await getBooks()
+       res.status(200).send(result)
     } catch (err) {
         return res.status(400).send({error: err.message})
     }
 
-    res.status(201).send(result)
 })
 
 app.get("/book/:id",  async (req, res) => {
     const result = await getOneBook(req.params.id)
-    res.status(201).send(result)
+    res.status(200).send(result)
 })
 
 app.patch("/book/:id",  async (req, res) => {
     const result = await updateBook(req.params.id, req.body)
-    res.status(201).send(result)
+    res.status(200).send(result)
+})
+
+app.delete("/book/:id",  async (req, res) => {
+    const result = await deleteBook(req.params.id)
+    res.status(200).send(result)
 })
 
 

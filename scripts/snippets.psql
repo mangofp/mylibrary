@@ -1,2 +1,7 @@
 select * from author;
 select * from books;
+
+select name author, title, description, books.id
+from books
+left join author 
+on author.id = books.author_id;
