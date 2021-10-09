@@ -2,7 +2,12 @@ const express = require('express')
 require('dotenv').config()
 const cors = require('cors')
 
-const { addBook, getBooks, getOneBook } = require('./controllers')
+const { 
+    addBook, 
+    getBooks, 
+    getOneBook,
+    updateBook 
+} = require('./controllers')
 
 const app = express()
 app.use(express.json())
@@ -22,7 +27,7 @@ app.get("/book", async (req, res) => {
     } catch (err) {
         return res.status(400).send({error: err.message})
     }
-    
+
     res.status(201).send(result)
 })
 
@@ -30,6 +35,12 @@ app.get("/book/:id",  async (req, res) => {
     const result = await getOneBook(req.params.id)
     res.status(201).send(result)
 })
+
+app.patch("/book/:id",  async (req, res) => {
+    const result = await updateBook(req.params.id, req.body)
+    res.status(201).send(result)
+})
+
 
 app.listen(PORT, () => {
     console.log("Book api running on " + PORT)
