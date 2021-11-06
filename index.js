@@ -10,9 +10,40 @@ const {
     deleteBook 
 } = require('./controllers')
 
+function logReqQuery(req, res, next) {
+    console.log("Request with parameters:")
+    console.log(req.method)
+    console.log(req.query)
+    next()
+}
+
+let allowedTokens = [
+    {token: '100', user: 'john@doe.rr'},
+    {token: '101', user: 'jane@doe.rr'}
+]
+
+function getEmailByToken(token) {
+    return allowedTokens.find( e => e.token === token)
+}
+
+function checkUser(req, res, next) {
+    if (!req.query.token) {
+        return res.status(400).send({error: 'No token'})
+    }
+    
+    const userEmail = getEmailByToken(req.query.token)
+    if (!userEmail) {
+        return res.status(400). send({error: 'Token not valid'})
+    }
+
+    console.log("Action by user " + userEmail.user)
+    next()
+}
+
 const app = express()
 app.use(express.json())
 app.use(cors())
+app.use(checkUser)
 
 const PORT = process.env.PORT || 8080
 
@@ -29,7 +60,6 @@ app.get("/book", async (req, res) => {
     } catch (err) {
         return res.status(400).send({error: err.message})
     }
-
 })
 
 app.get("/book/:id",  async (req, res) => {

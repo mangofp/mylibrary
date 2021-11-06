@@ -67,6 +67,7 @@ async function getBooks() {
     return books
 }
 
+//TODO dölaksdöflkasdöflk 
 async function getOneBook(id) {
     return await db.one('SELECT ${columns:name} FROM ${table:name} WHERE id = ${bookid}', {
         columns: ['id', 'title', 'description', 'author_id'],
