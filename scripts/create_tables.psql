@@ -11,3 +11,10 @@ CREATE TABLE books (
    author_id INT REFERENCES author(id)
 );
 
+CREATE TABLE users (
+   id serial PRIMARY KEY,
+   account VARCHAR(255) NOT NULL,
+   password_hash TEXT,
+   salt VARCHAR(255)
+);
+

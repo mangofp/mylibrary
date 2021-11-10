@@ -1,6 +1,7 @@
 
 const pgp = require('pg-promise')()
-let db
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 if (process.env.DATABASE_URL) {
     db = pgp({
@@ -40,6 +41,28 @@ async function addBook(book) {
     return getOneBook(result.id);
 }
 
+async function addUser(account, password) {
+    const checkUser = await getUser(account)
+    if (checkUser) {
+        return false
+    }
+
+    const salt = await bcrypt.genSalt(saltRounds)
+    const passwordHash = await bcrypt.hash(password, salt)
+    const newUser = {account, salt, password_hash: passwordHash}
+
+    const result = await db.one('INSERT INTO users(${this:name}) VALUES(${this:csv}) RETURNING account', newUser)
+    return getUser(result.account);
+}
+
+async function authenticateUser(account, password) {
+    const user = await _getOneUser(account)
+    if (!user) {
+        return false
+    }
+    return bcrypt.compare(password, user.password_hash)
+}
+
 async function updateBook(id, update) {
     await db.query("UPDATE books SET description = '${description:value}' WHERE id = ${id}", {
         id: id,
@@ -67,7 +90,6 @@ async function getBooks() {
     return books
 }
 
-//TODO dölaksdöflkasdöflk 
 async function getOneBook(id) {
     return await db.one('SELECT ${columns:name} FROM ${table:name} WHERE id = ${bookid}', {
         columns: ['id', 'title', 'description', 'author_id'],
@@ -76,10 +98,36 @@ async function getOneBook(id) {
     });
 }
 
+async function _getOneUser(account) {
+    try {
+        return await db.one('SELECT ${columns:name} FROM ${table:name} WHERE account = ${account}', {
+            columns: ['id', 'account', 'salt', 'password_hash'],
+            table: 'users',
+            account: account
+        });
+    } catch (err) {
+        console.log("Error: " + err.message)
+        return false
+    }
+}
+
+async function getUser(id) {
+    const user = await _getOneUser(id)
+    if (!user) {
+        return false
+    }
+    return {
+        id: user.id,
+        account: user.account
+    }
+}
+
 module.exports = {
     addBook,
     getOneBook,
     getBooks,
     updateBook,
-    deleteBook
+    deleteBook,
+    addUser,
+    authenticateUser
 }
